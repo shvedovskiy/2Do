@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>2Do | The simplest todo manager</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1 class="main_title">Simplest todo manager</h1>
+    </header>
+    <form name="add_task_form">
+        <fieldset>
+            <input type="text" autofocus required placeholder="Type something..." name="new_task">
+            <input type="submit" value="Add new task">
+        </fieldset>
+    </form>
+    <button id="mark_all_btn">Mark all as completed</button>
+    <button id="delete_all_btn">Delete all completed</button>
+    <div class="content">
+        <ul class="tasks_list"></ul>
+    </div>
+
+    <footer>
+
+    </footer>
+
+    <script>
+        var tasks = localStorage.todoTasks;
+        if (tasks === undefined) {
+            localStorage.todoTasks = "";
+        }
+
+        window.onload = function() {
+            var new_task_form = document.forms.add_task_form;
+            var new_task_input = new_task_form.elements.new_task;
+            var new_task_str = "";
+
+
+            new_task_input.onchange = function () {
+                new_task_str = new_task_input.value;
+            };
+
+            new_task_form.onsubmit = function() {
+                localStorage.todoTasks += (new_task_str + '; ');
+                return false;
+            }
+        };
+    </script>
+</body>
+
+</html>
