@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress JSUnresolvedVariable -->
 <html lang="en">
 
 <head>
@@ -9,45 +10,60 @@
 
 <body>
     <header>
-        <h1 class="main_title">Simplest todo manager</h1>
+        <h1 class="main-title">Simplest todo manager</h1>
     </header>
-    <form name="add_task_form">
+    <form id="new-task-form">
         <fieldset>
-            <input type="text" autofocus required placeholder="Type something..." name="new_task">
+            <input type="text" autofocus required placeholder="Type something..." id="new-task-input">
             <input type="submit" value="Add new task">
         </fieldset>
     </form>
-    <button id="mark_all_btn">Mark all as completed</button>
-    <button id="delete_all_btn">Delete all completed</button>
+    <label>
+        Mark all as completed
+        <input type="checkbox" name="mark-all">
+    </label>
+    <button id="delete-all-btn" style="visibility: hidden;">Delete all completed</button>
     <div class="content">
-        <ul class="tasks_list"></ul>
+        <ul class="tasks-list"></ul>
     </div>
 
-    <footer>
-
-    </footer>
-
     <script>
-        var tasks = localStorage.todoTasks;
-        if (tasks === undefined) {
-            localStorage.todoTasks = "";
+        $(function () {
+            var tasks = JSON.parse(localStorage.getItem('todoTasks'));
+            if (tasks == null) {
+                tasks = [];
+                localStorage.setItem('todoTasks', '[]');
+            } else {
+                for (var i in tasks) {
+                    addToList(tasks[i]);
+                }
+            }
+
+
+            $('#new-task-form').submit(function() {
+                var task = $('#new-task-input').val();
+                tasks.push(task);
+                updateStorage(tasks);
+                $('#new-task-input').val("");
+                addToList(task);
+                return false;
+            });
+
+            $('input[name="mark-all"]').change(function() {
+                var checked = $(this).is(':checked');
+                $('input[name="done"]').each(function () {
+                    $(this).prop('checked', checked);
+                });
+            });
+        });
+
+        function addToList(task) {
+            $('.tasks-list').append('<li class="tasks-item"><input type="checkbox" name="done"><p>' + task + '</p><button id="delete-tasks-item">Delete</button></li>');
         }
 
-        window.onload = function() {
-            var new_task_form = document.forms.add_task_form;
-            var new_task_input = new_task_form.elements.new_task;
-            var new_task_str = "";
-
-
-            new_task_input.onchange = function () {
-                new_task_str = new_task_input.value;
-            };
-
-            new_task_form.onsubmit = function() {
-                localStorage.todoTasks += (new_task_str + '; ');
-                return false;
-            }
-        };
+        function updateStorage(tasks) {
+            localStorage.setItem('todoTasks', JSON.stringify(tasks));
+        }
     </script>
 </body>
 
