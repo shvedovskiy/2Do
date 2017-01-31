@@ -12,7 +12,7 @@ $(function () {
 
     $('#new-task-form').submit(function () {
         var task = $('#new-task-input').val();
-        $('new-task-input').val("");
+        $('#new-task-input').val("");
         addToList(task);
         updateMarkers();
         updateStorage();
@@ -23,6 +23,7 @@ $(function () {
         var checked = $(this).is(':checked');
         $('input[name="done"]').each(function () {
             $(this).prop('checked', checked);
+            strike(this);
         });
         updateMarkers();
     });
@@ -36,8 +37,19 @@ $(function () {
     });
 });
 
+$(document).delegate('button[name="delete-task"]', 'click', function () {
+    $(this).parent().remove();
+    updateMarkers();
+    updateStorage();
+});
+
+$(document).delegate('input[name="done"]', 'change', function () {
+    strike(this);
+    updateMarkers();
+});
+
 function addToList(task) {
-    $('.tasks-list').append('<li class="tasks-item"><input type="checkbox" name="done"><span class="task-text" contenteditable>' + task + '</span><button id="delete-tasks-item">Delete</button></li>');
+    $('.tasks-list').append('<li class="tasks-item"><input type="checkbox" name="done"><span class="task-text" contenteditable>' + task + '</span><button name="delete-task">Delete</button></li>');
 }
 
 function updateMarkers() {
@@ -52,6 +64,16 @@ function updateMarkers() {
             $('input[name="mark-all"]').prop('checked', true);
             $('#todos-left').text('');
         }
+    } else {
+        $('input[name="mark-all"]').prop('checked', false);
+    }
+}
+
+function strike(elem) {
+    if ($(elem).is(':checked')) {
+        $(elem).siblings('.task-text').wrap('<strike>');
+    } else {
+        $(elem).siblings('strike').children().unwrap();
     }
 }
 
