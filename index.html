@@ -6,65 +6,43 @@
     <meta charset="UTF-8">
     <title>2Do | The simplest todo manager</title>
     <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/todo.js"></script>
 </head>
 
 <body>
-    <header>
-        <h1 class="main-title">Simplest todo manager</h1>
-    </header>
-    <form id="new-task-form">
-        <fieldset>
-            <input type="text" autofocus required placeholder="Type something..." id="new-task-input">
-            <input type="submit" value="Add new task">
-        </fieldset>
-    </form>
-    <label>
-        Mark all as completed
-        <input type="checkbox" name="mark-all">
-    </label>
-    <button id="delete-all-btn" style="visibility: hidden;">Delete all completed</button>
-    <div class="content">
-        <ul class="tasks-list"></ul>
+    <div class="todo-app">
+
+        <header>
+            <h1 class="todo-title">
+                <center>Simplest todo manager</center>
+            </h1>
+
+            <form id="new-task-form">
+                <input type="text" autofocus required placeholder="Type something..." id="new-task-input">
+                <input type="submit" value="Add new task">
+            </form>
+
+            <label>
+                <input type="checkbox" name="mark-all"> Mark all as completed
+            </label>
+        </header>
+
+        <div class="todo-content">
+            <ul class="tasks-list"></ul>
+        </div>
+
+        <div class="todo-footer">
+            <span id="todos-left"></span>
+            <button id="delete-all">Delete all completed</button>
+        </div>
     </div>
 
-    <script>
-        $(function () {
-            var tasks = JSON.parse(localStorage.getItem('todoTasks'));
-            if (tasks == null) {
-                tasks = [];
-                localStorage.setItem('todoTasks', '[]');
-            } else {
-                for (var i in tasks) {
-                    addToList(tasks[i]);
-                }
-            }
+    <footer>
+        <center>
+            <p>Designed by <a href="mailto:ol.shvedov@gmail.com" title="Write an email">Oleg Shvedov</a>, 2016</p>
+        </center>
+    </footer>
 
-
-            $('#new-task-form').submit(function() {
-                var task = $('#new-task-input').val();
-                tasks.push(task);
-                updateStorage(tasks);
-                $('#new-task-input').val("");
-                addToList(task);
-                return false;
-            });
-
-            $('input[name="mark-all"]').change(function() {
-                var checked = $(this).is(':checked');
-                $('input[name="done"]').each(function () {
-                    $(this).prop('checked', checked);
-                });
-            });
-        });
-
-        function addToList(task) {
-            $('.tasks-list').append('<li class="tasks-item"><input type="checkbox" name="done"><p>' + task + '</p><button id="delete-tasks-item">Delete</button></li>');
-        }
-
-        function updateStorage(tasks) {
-            localStorage.setItem('todoTasks', JSON.stringify(tasks));
-        }
-    </script>
 </body>
 
 </html>
