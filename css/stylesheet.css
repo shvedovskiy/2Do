@@ -13,9 +13,14 @@ header,
     padding-left: 22px;
 }
 
+.delete-task,
+#delete-all
+{
+    float: right;
+}
+
 .delete-task {
     visibility: hidden;
-    float: right;
     color: #777;
 }
 
@@ -28,13 +33,16 @@ span.glyphicon-remove-sign {
 }
 
 .complete-marker {
-    padding-left: 31px;
+    padding-left: 19px;
     margin-bottom: 5px;
 }
 
-#delete-all {
-    float: right;
+.complete-marker,
+.todo-footer,
+.todo-content {
+    display: none;
 }
+
 
 .task-text {
     font-size: 1.2em;

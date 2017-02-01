@@ -3,6 +3,8 @@ $(function () {
     if (tasks == null)
         localStorage.setItem('todoTasks', '[]');
     else
+        if (tasks.length > 0)
+            updateVisibility(true);
         for (var i in tasks)
             addToList(tasks[i]);
 
@@ -12,7 +14,7 @@ $(function () {
         var task = $('#new-task-input');
 
         if ($('.task-item').length == 0)
-            $('.complete-marker').css('display', 'block');
+            updateVisibility(true);
 
         addToList(task.val());
         task.val('');
@@ -59,6 +61,17 @@ $(document).delegate('.task-item', 'mouseleave', function () {
     $(this).children('span.delete-task').css('visibility', 'hidden');
 });
 
+function updateVisibility(isVisible) {
+    if (isVisible) {
+        $('.complete-marker').css('display', 'block');
+        $('.todo-content').css('display', 'block');
+        $('.todo-footer').css('display', 'block');
+    } else {
+        $('.complete-marker').css('display', 'none');
+        $('.todo-content').css('display', 'none');
+        $('.todo-footer').css('display', 'none');
+    }
+}
 
 function addToList(task) {
     $('.tasks-list').append(
@@ -86,9 +99,9 @@ function updateMarkers() {
 
         $('#todos-left').text(left + ' task(s) left');
     } else {
-        $('input[name="mark-all"]').prop('checked', false).parent().css('display', 'none');
+        $('input[name="mark-all"]').prop('checked', false);
         $('#todos-left').text('');
-        $('#delete-all').css('display', 'none');
+        updateVisibility(false);
     }
 }
 
