@@ -4,15 +4,17 @@ $(function () {
         tasks = [];
         localStorage.setItem('todoTasks', '[]');
     } else {
-        for (var i in tasks) {
+        for (var i in tasks)
             addToList(tasks[i]);
-        }
     }
     updateMarkers();
 
     $('#new-task-form').submit(function () {
         var task = $('#new-task-input').val();
-        $('#new-task-input').val("");
+        $('#new-task-input').val('');
+        if ($('.task-item').length === 0)
+            $('#complete-marker').css('display', 'block');
+
         addToList(task);
         updateMarkers();
         updateStorage();
@@ -48,8 +50,17 @@ $(document).delegate('input[name="done"]', 'change', function () {
     updateMarkers();
 });
 
+$(document).delegate('.task-item', 'mouseenter', function () {
+    $(this).children('button').css('visibility', 'visible');
+});
+
+$(document).delegate('.task-item', 'mouseleave', function () {
+    $(this).children('button').css('visibility', 'hidden');
+});
+
+
 function addToList(task) {
-    $('.tasks-list').append('<li class="tasks-item"><input type="checkbox" name="done"><span class="task-text" contenteditable>' + task + '</span><button name="delete-task">Delete</button></li>');
+    $('.tasks-list').append('<li class="task-item"><input type="checkbox" name="done"><span class="task-text" contenteditable>' + task + '</span><button name="delete-task" style="visibility:hidden;">Delete</button></li>');
 }
 
 function updateMarkers() {
@@ -57,30 +68,35 @@ function updateMarkers() {
         var checked = $('input[name="done"]:checked').length;
         var left = $('input[name="done"]').length - checked;
 
-        if (left > 0) {
+        if (checked > 0)
+            $('#delete-all').css('display', 'inline');
+        else
+            $('#delete-all').css('display', 'none');
+
+        if (left > 0)
             $('input[name="mark-all"]').prop('checked', false);
-            $('#todos-left').text(left + ' left');
-        } else {
+        else
             $('input[name="mark-all"]').prop('checked', true);
-            $('#todos-left').text('');
-        }
+
+        $('#todos-left').text(left + ' left');
     } else {
-        $('input[name="mark-all"]').prop('checked', false);
+        $('input[name="mark-all"]').prop('checked', false).parent().css('display', 'none');
+        $('#todos-left').text('');
+        $('#delete-all').css('display', 'none');
     }
 }
 
 function strike(elem) {
-    if ($(elem).is(':checked')) {
+    if ($(elem).is(':checked'))
         $(elem).siblings('.task-text').wrap('<strike>');
-    } else {
+    else
         $(elem).siblings('strike').children().unwrap();
-    }
 }
 
 function updateStorage() {
     var tasks = $('.task-text').toArray();
-    for (i in tasks) {
+    for (i in tasks)
         tasks[i] = tasks[i].innerHTML;
-    }
+
     localStorage.setItem('todoTasks', JSON.stringify(tasks));
 }

@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<!--suppress JSUnresolvedVariable -->
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>2Do | The simplest todo manager</title>
+    <meta name="description" content="">
+    <meta name="author" content="Oleg Shvedov">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
     <script src="js/jquery-3.1.1.min.js"></script>
     <script src="js/todo.js"></script>
 </head>
@@ -18,18 +22,18 @@
             </h1>
 
             <form id="new-task-form">
-                <input type="text" autofocus required placeholder="Type something..." id="new-task-input">
+                <input type="text" autofocus required autocomplete="off" placeholder="Type something..." id="new-task-input">
                 <input type="submit" value="Add new task">
             </form>
-
-            <label>
-                <input type="checkbox" name="mark-all"> Mark all as completed
-            </label>
         </header>
 
-        <div class="todo-content">
+        <section class="todo-content">
+            <label id="complete-marker">
+                <input type="checkbox" name="mark-all" id="mark-all">Mark all as complete
+            </label>
+
             <ul class="tasks-list"></ul>
-        </div>
+        </section>
 
         <div class="todo-footer">
             <span id="todos-left"></span>
