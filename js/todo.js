@@ -1,21 +1,22 @@
 $(function () {
     var tasks = JSON.parse(localStorage.getItem('todoTasks'));
-    if (tasks == null) {
-        tasks = [];
+    if (tasks == null)
         localStorage.setItem('todoTasks', '[]');
-    } else {
+    else
         for (var i in tasks)
             addToList(tasks[i]);
-    }
+
     updateMarkers();
 
     $('#new-task-form').submit(function () {
-        var task = $('#new-task-input').val();
-        $('#new-task-input').val('');
-        if ($('.task-item').length === 0)
-            $('#complete-marker').css('display', 'block');
+        var task = $('#new-task-input');
 
-        addToList(task);
+        if ($('.task-item').length == 0)
+            $('.complete-marker').css('display', 'block');
+
+        addToList(task.val());
+        task.val('');
+
         updateMarkers();
         updateStorage();
         return false;
@@ -39,7 +40,7 @@ $(function () {
     });
 });
 
-$(document).delegate('button[name="delete-task"]', 'click', function () {
+$(document).delegate('span.delete-task', 'click', function () {
     $(this).parent().remove();
     updateMarkers();
     updateStorage();
@@ -51,16 +52,21 @@ $(document).delegate('input[name="done"]', 'change', function () {
 });
 
 $(document).delegate('.task-item', 'mouseenter', function () {
-    $(this).children('button').css('visibility', 'visible');
+    $(this).children('span.delete-task').css('visibility', 'visible');
 });
 
 $(document).delegate('.task-item', 'mouseleave', function () {
-    $(this).children('button').css('visibility', 'hidden');
+    $(this).children('span.delete-task').css('visibility', 'hidden');
 });
 
 
 function addToList(task) {
-    $('.tasks-list').append('<li class="task-item"><input type="checkbox" name="done"><span class="task-text" contenteditable>' + task + '</span><button name="delete-task" style="visibility:hidden;">Delete</button></li>');
+    $('.tasks-list').append(
+        '<li class="list-group-item task-item">' +
+        '   <input type="checkbox" name="done">' +
+        '   <span class="task-text" contenteditable>' + task + '</span>' +
+        '   <span class="delete-task glyphicon glyphicon-remove-sign" aria-hidden="true"></span>' +
+        '</li>');
 }
 
 function updateMarkers() {
@@ -78,7 +84,7 @@ function updateMarkers() {
         else
             $('input[name="mark-all"]').prop('checked', true);
 
-        $('#todos-left').text(left + ' left');
+        $('#todos-left').text(left + ' task(s) left');
     } else {
         $('input[name="mark-all"]').prop('checked', false).parent().css('display', 'none');
         $('#todos-left').text('');
@@ -88,14 +94,14 @@ function updateMarkers() {
 
 function strike(elem) {
     if ($(elem).is(':checked'))
-        $(elem).siblings('.task-text').wrap('<strike>');
+        $(elem).siblings('.task-text').css('color', '#777').wrap('<strike>');
     else
-        $(elem).siblings('strike').children().unwrap();
+        $(elem).siblings('strike').children().css('color', '#000').unwrap();
 }
 
 function updateStorage() {
     var tasks = $('.task-text').toArray();
-    for (i in tasks)
+    for (var i in tasks)
         tasks[i] = tasks[i].innerHTML;
 
     localStorage.setItem('todoTasks', JSON.stringify(tasks));
