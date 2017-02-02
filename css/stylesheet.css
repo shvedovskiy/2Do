@@ -21,7 +21,7 @@ header,
 
 .delete-task {
     visibility: hidden;
-    color: #777;
+    color: #999;
 }
 
 .delete-task:hover {

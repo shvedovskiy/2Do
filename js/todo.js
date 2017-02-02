@@ -42,6 +42,41 @@ $(function () {
     });
 });
 
+$(document).delegate('span.task-text', 'click', function () {
+    $(this).blur(function () {
+        if ($(this).val().length == 0)
+            $(this).parent().remove();
+        updateStorage();
+    });
+});
+
+$(document).delegate('span.task-text', 'dblclick', function () {
+    var input = $('<input type="text">').attr('value', $(this).text());
+    $(this).replaceWith(input);
+
+    input.focus();
+    input.blur(function () {
+        if ($(this).val().length == 0)
+            $(this).parent().remove();
+        else
+            $(this).replaceWith($('<span class="task-text">').text($(this).val()));
+
+        updateStorage();
+        updateMarkers();
+    });
+    input.keypress(function (e) {
+        if (e.which == 13) {
+            if ($(this).val().length == 0)
+                $(this).parent().remove();
+            else
+                $(this).replaceWith($('<span class="task-text">').text($(this).val()));
+
+            updateStorage();
+            updateMarkers();
+        }
+    });
+});
+
 $(document).delegate('span.delete-task', 'click', function () {
     $(this).parent().remove();
     updateMarkers();
@@ -77,7 +112,7 @@ function addToList(task) {
     $('.tasks-list').append(
         '<li class="list-group-item task-item">' +
         '   <input type="checkbox" name="done">' +
-        '   <span class="task-text" contenteditable>' + task + '</span>' +
+        '   <span class="task-text">' + task + '</span>' +
         '   <span class="delete-task glyphicon glyphicon-remove-sign" aria-hidden="true"></span>' +
         '</li>');
 }

@@ -1,3 +1,8 @@
 .idea/
 .DS_Store
 js/jquery-3.1.1.min.js
+/css/bootstrap.min.css
+/css/bootstrap-theme.min.css
+/css/bootstrap.min.css.map
+/fonts/
+/js/bootstrap.min.js
