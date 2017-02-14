@@ -3,16 +3,21 @@ $(function () {
     if (tasks == null)
         localStorage.setItem('todoTasks', '[]');
     else
-        if (tasks.length > 0)
-            updateVisibility(true);
-        for (var i in tasks)
-            addToList(tasks[i]);
+    if (tasks.length > 0)
+        updateVisibility(true);
+    for (var i in tasks)
+        addToList(tasks[i]);
 
     updateMarkers();
 
-    $('#new-task-form').submit(function () {
-        var task = $('#new-task-input');
+    $('#new-task-form').submit(function (e) {
+        if ($(this).find("[required]").val() == '') {
+            e.preventDefault();
+            alert("Required field should not be blank.");
+            return false;
+        }
 
+        var task = $('#new-task-input');
         if ($('.task-item').length == 0)
             updateVisibility(true);
 
@@ -113,7 +118,7 @@ function addToList(task) {
         '<li class="list-group-item task-item">' +
         '   <input type="checkbox" name="done">' +
         '   <span class="task-text">' + task + '</span>' +
-        '   <span class="delete-task glyphicon glyphicon-remove-sign" aria-hidden="true"></span>' +
+        '   <span class="delete-task glyphicon glyphicon-remove-sign" aria-label="Delete task"></span>' +
         '</li>');
 }
 
